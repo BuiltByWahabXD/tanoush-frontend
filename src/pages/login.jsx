@@ -54,7 +54,7 @@ const LoginPage = () => {
           name: res.data.name,
           email: res.data.email
         });
-        navigate("/", { replace: true });
+        navigate("/home", { replace: true });
       }
     } catch (err) {
       const msg = err?.data?.message || err.message || "Login failed";

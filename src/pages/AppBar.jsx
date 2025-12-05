@@ -14,14 +14,19 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useThemeContext } from '../context/themeContext';
 import MaterialUISwitch from '../components/ThemeSwitch';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../auth/AuthProvider';
+import { apiFetch } from '../api/api';
 
-const pages = ['Products', 'Pricing'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = [];
+const settings = ['Profile', 'Logout'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const { theme, toggleTheme } = useThemeContext();
+  const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -38,6 +43,25 @@ function ResponsiveAppBar() {
     setAnchorElUser(null);
   };
 
+  const handleMenuItemClick = async (setting) => {
+    handleCloseUserMenu();
+    
+    if (setting === 'Profile') {
+      navigate('/me');
+    } else if (setting === 'Logout') {
+      try {
+        await apiFetch("/api/users/logout", {
+          method: "POST",
+        });
+      } catch (err) {
+        console.error("Logout error:", err);
+      } finally {
+        logout();
+        navigate("/login", { replace: true });
+      }
+    }
+  };
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -47,7 +71,7 @@ function ResponsiveAppBar() {
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            onClick={() => navigate('/home')}
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -56,9 +80,10 @@ function ResponsiveAppBar() {
               letterSpacing: '.3rem',
               color: 'inherit',
               textDecoration: 'none',
+              cursor: 'pointer',
             }}
           >
-            LOGO
+            SYNC
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -100,7 +125,7 @@ function ResponsiveAppBar() {
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            onClick={() => navigate('/home')}
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -110,9 +135,10 @@ function ResponsiveAppBar() {
               letterSpacing: '.3rem',
               color: 'inherit',
               textDecoration: 'none',
+              cursor: 'pointer',
             }}
           >
-            LOGO
+            SYNC
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
@@ -133,7 +159,7 @@ function ResponsiveAppBar() {
             />
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="Abdul Wahab" src="/static/images/Profile.png" />
               </IconButton>
             </Tooltip>
             <Menu
@@ -153,7 +179,7 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={() => handleMenuItemClick(setting)}>
                   <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
                 </MenuItem>
               ))}

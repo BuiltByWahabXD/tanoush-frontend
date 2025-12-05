@@ -1,27 +1,17 @@
-.homepage-container {
+.profile-container {
   min-height: calc(100vh - 64px);
   width: 100vw;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   background: var(--bg-color);
-  padding: 40px 20px;
+  padding: 20px;
   margin: 0;
   margin-left: -8px;
   overflow-x: hidden;
 }
 
-.homepage-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 345px));
-  gap: 24px;
-  width: 100%;
-  max-width: 1400px;
-  justify-content: center;
-  align-items: start;
-}
-
-.homepage-card {
+.profile-card {
   background: var(--card-bg);
   padding: 30px;
   border-radius: 12px;
@@ -31,20 +21,20 @@
   max-width: 400px;
 }
 
-.homepage-title {
+.profile-title {
   margin-bottom: 10px;
   font-size: 28px;
   font-weight: bold;
   color: var(--text-color);
 }
 
-.homepage-subtitle {
+.profile-subtitle {
   margin-bottom: 20px;
   color: var(--muted);
   font-size: 16px;
 }
 
-.homepage-infoBox {
+.profile-infoBox {
   padding: 15px;
   border-radius: 8px;
   background: rgba(37, 99, 235, 0.1);
@@ -53,22 +43,7 @@
   border: 1px solid rgba(37, 99, 235, 0.2);
 }
 
-.homepage-infoBox p {
+.profile-infoBox p {
   color: var(--text-color);
   margin: 8px 0;
-}
-
-.homepage-logoutBtn {
-  padding: 10px 20px;
-  font-size: 16px;
-  background: #ff4b4b;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.homepage-logoutBtn:hover {
-  background: #e84343;
 }
