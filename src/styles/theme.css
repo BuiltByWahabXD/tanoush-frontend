@@ -10,7 +10,7 @@
 
 /* Dark theme */
 [data-theme="dark"] {
-  --bg-color: #0b0f16;
+  --bg-color: #000000;
   --card-bg: #0f1720;
   --text-color: #f8fafc;
   --muted: #9ca3af;
