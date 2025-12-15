@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useThemeContext } from '../context/themeContext';
-import MaterialUISwitch from '../components/ThemeSwitch';
+import MaterialUISwitch from './ThemeSwitch';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthProvider';
 import { apiFetch } from '../api/api';

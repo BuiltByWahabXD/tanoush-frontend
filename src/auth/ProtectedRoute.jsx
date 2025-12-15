@@ -2,13 +2,16 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
-import AppBar from "../pages/AppBar";
+import AppBar from "../components/AppBar";
+import ResponsiveAppBar from "../components/LandingAppBar";
 
 export default function ProtectedRoute({ children }) {
   const { isAuthenticated } = useAuth();
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    
+    <ResponsiveAppBar />;
+    return <Navigate to="/" replace />;
   }
 
   return (

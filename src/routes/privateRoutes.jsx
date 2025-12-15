@@ -5,10 +5,7 @@ import ProfilePage from "../pages/ProfilePage";
 import ProtectedRoute from "../auth/ProtectedRoute";
 
 const privateRoutes = [
-  {
-    path: "/",
-    element: <Navigate to="/home" replace />
-  },
+  
   {
     path: "/home",
     element: (

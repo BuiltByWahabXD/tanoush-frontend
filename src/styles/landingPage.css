@@ -1,0 +1,65 @@
+/* Reset box-sizing and some defaults 
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+*/
+
+.landing-Page{
+    min-height: 100vh;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.hero-image{
+    width: 100%;
+    height: auto;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-image img {
+    width: 100%;
+    height: 700px;
+    object-fit: cover;
+    display: block;
+}
+.stepper-section{
+    padding: 50px 20px;
+    background: var(--bg-color);
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.image-list-section{
+    padding: 40px 20px;
+    background: var(--bg-color);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    overflow-x: hidden;
+    width: 100%;
+}
+.timeline-section{
+    padding: 40px 20px;
+    background: var(--bg-color);
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
