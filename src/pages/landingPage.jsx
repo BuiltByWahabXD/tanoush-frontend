@@ -53,10 +53,10 @@ const LandingPage = () => {
         </div>    
 
         <div>
-            <ParallaxMarquee baseVelocity={-3} className="first-marquee">
+            <ParallaxMarquee baseVelocity={-1.5} className="first-marquee">
                 DISCOVER • CHOOSE • EVOLVE •
             </ParallaxMarquee>
-            <ParallaxMarquee baseVelocity={3} className="second-marquee">
+            <ParallaxMarquee baseVelocity={1.5} className="second-marquee">
                 EXPLORE • EXPERIENCE • REMEMBER •
             </ParallaxMarquee>
             

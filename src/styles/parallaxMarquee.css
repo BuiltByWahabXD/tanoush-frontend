@@ -19,7 +19,7 @@
   display: flex;
   flex-wrap: nowrap;
   font-size: 40px;  
-  font-weight: 500;
+  font-weight: 200;
   text-transform: uppercase;
 }
 .first-marquee .scroller {

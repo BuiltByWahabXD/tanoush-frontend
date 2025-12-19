@@ -19,7 +19,7 @@ interface ParallaxProps {
 export default function ParallaxMarquee({
   children,
   baseVelocity = 5
-}: ParallaxProps) {
+}:ParallaxProps) {
   const baseX = useMotionValue(0);
   const { scrollY } = useScroll();
   const scrollVelocity = useVelocity(scrollY);
