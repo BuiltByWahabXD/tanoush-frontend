@@ -13,7 +13,9 @@
   align-items: center;
   justify-content: center;
   padding: 32px;
-  background: var(--bg-color);
+  background-image: url('/static/images/hero-image.jpg');
+  background-size: cover;
+  background-position: center; 
 }
 
 /* Card */
@@ -44,8 +46,9 @@
 .signup-form h2 {
   margin: 0;
   font-size: 1.35rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 700;
-  color: var(--text-color);
+  color: #A52A2A;
 }
 
 /* Hint text */
@@ -131,7 +134,7 @@
   font-weight: 700;
   font-size: 1rem;
   color: #fff;
-  background: var(--accent);
+  background: #A52A2A;
   box-shadow: 0 10px 30px rgba(37,99,235,0.12);
   cursor: pointer;
   transition: transform .12s ease, box-shadow .12s ease;
@@ -148,6 +151,14 @@
   margin-top: 12px;
   color: var(--muted);
   font-size: 0.92rem;
+}
+.signup-form .small a {
+  color: #A52A2A;
+ 
+}
+
+.signup-form .small a:hover {
+  text-decoration: underline;
 }
 
 /* Responsive */

@@ -49,6 +49,7 @@ export default function LandingAppBar() {
             onClick={() => navigate('/')}
             sx={{
               fontWeight: 700,
+              fontFamily: "'Sekuya', cursive",
               color: '#A52A2A',
               textDecoration: 'none',
               flexGrow: 1,
@@ -76,8 +77,9 @@ export default function LandingAppBar() {
             onClick={() => navigate('/login')}
             sx={{
               backgroundColor: '#A52A2A',
+              fontFamily: "'Sekuya', cursive",
               color: 'white',
-              fontWeight: 600,
+              fontWeight: 100,
               borderRadius: '20px',
               px: 3,
               py: 0.7,

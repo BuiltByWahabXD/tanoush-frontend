@@ -53,10 +53,6 @@ const itemData = [
     title: 'Ghost',
   },
   {
-    img: '/static/images/imagelist/godOfWar.jpg',
-    title: 'God of War',
-  },
-  {
     img: '/static/images/imagelist/lastOfUs.jpg',
     title: 'The Last of Us',
   },
@@ -79,10 +75,6 @@ const itemData = [
   {
     img: '/static/images/imagelist/spiderman.jpg',
     title: 'Spiderman',
-  },
-  {
-    img: '/static/images/imagelist/gta6.jpg',
-    title: 'GTA 6',
   },
   {
     img: '/static/images/imagelist/AC3.jpg',

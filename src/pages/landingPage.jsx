@@ -5,6 +5,7 @@ import Lightning from "../components/Lightning";
 import "../styles/landingPage.css";
 import MasonryImageList from "../components/Masonry-image-list";
 import ParallaxMarquee from "../components/ParallaxMarquee";
+import ZoomLineChart from "../components/ZoomLineChart";
 
 
 const LandingPage = () => {
@@ -21,8 +22,6 @@ const LandingPage = () => {
         </div>
         <div className="stepper-section">
             <IconStepper />
-        </div>
-        <div>
         </div>
 
         <div className="image-list-section">
@@ -61,6 +60,25 @@ const LandingPage = () => {
             </ParallaxMarquee>
             
         </div>
+
+        <div className="comparison-section">
+                <h1>THE BATTLE OF PLAYSTYLES</h1>
+            
+           <div className="comparison-text">
+                <h2>FORTNITE VS PUBG</h2>
+                <p>
+                    Fortnite players thrive on speed, creativity, and high-octane combat, while PUBG
+                    players focus on realism, precision, and survival tactics. Two games, two mindsets —
+                    both shaping how players think, react, and dominate the battlefield.
+                </p>
+            </div>
+
+
+            <div className="comparison-graph">
+                <ZoomLineChart />
+            </div>
+        
+        </div>    
 
         <div className="timeline-section">
             <CustomizedTimeline />  
