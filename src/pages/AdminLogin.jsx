@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { apiFetch } from "../api/api";    
 import { useAuth } from "../auth/AuthProvider";   
 
-const LoginPage = () => {
+const AdminLogin = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -46,21 +46,28 @@ const LoginPage = () => {
         },
       });
 
-      console.log("Login response:", res);
+      console.log("Admin login response:", res);
       
       if (res.success) {
+        // Check if user is actually an admin
+        if (res.data.role !== 'admin') {
+          setError("Access denied. Admin credentials required.");
+          setLoading(false);
+          return;
+        }
+
         login({
           userId: res.data.userId,
           name: res.data.name,
           email: res.data.email,
           role: res.data.role
         });
-        navigate("/products", { replace: true });
+        navigate("/admin/products", { replace: true });
       } else {
         setError(res.message || "Login failed");
       }
     } catch (err) {
-      console.error("Login error:", err);
+      console.error("Admin login error:", err);
       const msg = err?.message || "Login failed. Please try again.";
       setError(msg);
     } finally {
@@ -72,10 +79,22 @@ const LoginPage = () => {
     <div className="login-page">
       <form className="login-form" onSubmit={handleSubmit} noValidate>
         <div className="title">
-          <h2>LOGIN</h2>
+          <h2>ADMIN LOGIN</h2>
         </div>
 
-        <p className="hint">Log in to your account to continue.</p>
+        <div style={{
+          background: '#ff4444',
+          color: 'white',
+          padding: '8px 16px',
+          borderRadius: '4px',
+          textAlign: 'center',
+          marginBottom: '16px',
+          fontWeight: 'bold'
+        }}>
+          🔐 ADMIN ACCESS ONLY
+        </div>
+
+        <p className="hint">Enter your admin credentials to access the dashboard.</p>
 
         {error && <div className="error">{error}</div>}
 
@@ -83,7 +102,7 @@ const LoginPage = () => {
           <input
             name="email"
             type="email"
-            placeholder="Enter Your Email"
+            placeholder="Admin Email"
             value={formData.email}
             onChange={handleChange}
             aria-label="Email"
@@ -95,13 +114,12 @@ const LoginPage = () => {
           <input
             type={showPassword ? "text" : "password"}
             name="password"
-            placeholder="Enter Your Password"
+            placeholder="Admin Password"
             value={formData.password}
             onChange={handleChange}
             aria-label="Password"
             required
           />
-
           <span
             className="eye-icon"
             role="button"
@@ -111,19 +129,22 @@ const LoginPage = () => {
           >
             {showPassword ? "👁️" : "🫣"}
           </span>
-
         </div>
 
         <button className="login_button" type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
+          {loading ? "Logging in..." : "Login as Admin"}
         </button>
 
         <p className="small">
-          Don't have an account? <Link to="/signUp">Signup</Link>
+          Don't have an admin account? <Link to="/adminportal">Register</Link>
+        </p>
+        
+        <p className="small">
+          <Link to="/login">← Back to User Login</Link>
         </p>
       </form>
     </div>
   );
 };
 
-export default LoginPage;
+export default AdminLogin;

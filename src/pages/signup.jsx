@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import "../styles/Signup.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { apiFetch } from "../api/api";       
 import { useAuth } from "../auth/AuthProvider";   
 
 const SignupPage = () => {
+  const location = useLocation();
+  const isAdminSignup = location.pathname === '/adminportal';
+  
   const [formData, setFormData] = useState({ email: "", name: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -43,19 +46,27 @@ const SignupPage = () => {
     setError(null);
 
     try {
+      const payload = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      };
+
+      // Add role field if it's admin signup
+      if (isAdminSignup) {
+        payload.role = 'admin';
+      }
+
       const res = await apiFetch("/api/users/signup", {
         method: "POST",
-        body: {
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-        },
+        body: payload,
       });
 
       navigate("/login", { replace: true });
       
     } catch (err) {
-      const msg = err?.data?.message || err.message || "Signup failed";
+      console.error("Signup error:", err);
+      const msg = err?.message || "Signup failed. Please try again.";
       setError(msg);
     } finally {
       setLoading(false);
@@ -66,10 +77,28 @@ const SignupPage = () => {
     <div className="signup-page">
       <form className="signup-form" onSubmit={handleSubmit} noValidate>
         <div className="title">
-          <h2>SIGNUP</h2>
+          <h2>{isAdminSignup ? 'ADMIN SIGNUP' : 'SIGNUP'}</h2>
         </div>
 
-        <p className="hint">Create your account — it only takes a minute.</p>
+        <p className="hint">
+          {isAdminSignup 
+            ? 'Create your admin account with full management privileges.' 
+            : 'Create your account — it only takes a minute.'}
+        </p>
+
+        {isAdminSignup && (
+          <div className="admin-badge" style={{
+            background: '#ff4444',
+            color: 'white',
+            padding: '8px 16px',
+            borderRadius: '4px',
+            textAlign: 'center',
+            marginBottom: '16px',
+            fontWeight: 'bold'
+          }}>
+            🔐 ADMIN REGISTRATION
+          </div>
+        )}
 
         {error && <div className="error">{error}</div>}
 
@@ -125,7 +154,7 @@ const SignupPage = () => {
         </button>
 
         <p className="small">
-          Already have an account? <Link to="/login">Login</Link>
+          Already have an account? <Link to={isAdminSignup ? "/adminlogin" : "/login"}>Login</Link>
         </p>
       </form>
     </div>

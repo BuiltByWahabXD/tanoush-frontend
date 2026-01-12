@@ -2,22 +2,19 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
-import AppBar from "../components/AppBar";
-import ResponsiveAppBar from "../components/LandingAppBar";
+import ResponsiveAppBar from "../components/AppBar";
 
 export default function ProtectedRoute({ children }) {
   const { isAuthenticated } = useAuth();
 
   if (!isAuthenticated) {
-    
-    <ResponsiveAppBar />;
     return <Navigate to="/" replace />;
   }
 
   return (
     <>
-      <AppBar />
-      <main style={{ paddingTop: 16, color:"darkorange" }}>
+      <ResponsiveAppBar />
+      <main style={{ paddingTop: 80, color:"darkorange" }}>
         {children}
       </main>
     </>
