@@ -18,7 +18,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const hasCheckedAuth = useRef(false);
 
-  // Check if user is authenticated on mount (has valid cookies)
+  // Check if user is authenticated (has valid cookies)
   useEffect(() => {
     // Prevent duplicate calls in StrictMode
     if (hasCheckedAuth.current) return;

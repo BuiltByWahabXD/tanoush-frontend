@@ -83,7 +83,7 @@ export default function ResponsiveAppBar() {
         console.error("Logout error:", err);
       } finally {
         logout();
-        navigate("/login", { replace: true });
+        navigate("/", { replace: true });
       }
     }
   };

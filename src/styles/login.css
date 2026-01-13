@@ -13,7 +13,7 @@
   align-items: center;
   justify-content: center;
   padding: 32px;
-  background-image: url('/static/images/hero-image.jpg');
+  background-image: url('/static/images/background.jpg');
   background-size: cover;
   background-position: center;  
 }

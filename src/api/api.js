@@ -42,10 +42,22 @@ export async function apiFetch(path, { method = "GET", body, headers = {}, retry
 
   if (res.ok) return data;
 
-  if (res.status === 401 && retry && !path.includes("/refresh")) {
+  if (res.status === 401 && retry && !path.includes("/refresh") && !path.includes("/logout")) {
     const refreshed = await attemptRefresh();
     if (refreshed) {
       return apiFetch(path, { method, body, headers, retry: false, ...rest });
+    } else {
+      // Refresh failed - clear everything and logout
+      localStorage.removeItem("isAuthenticated");
+      
+      // Call backend logout to clear cookies
+      await fetch(`${API_URL}/api/users/logout`, {
+        method: "POST",
+        credentials: "include"
+      }).catch(() => {}); // Silent fail if already logged out
+      
+      // Redirect to login
+      window.location.href = "/login";
     }
   }
 

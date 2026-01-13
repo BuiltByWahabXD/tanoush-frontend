@@ -676,6 +676,8 @@ const LandingPage = () => {
         </Container>
       </Box>
 
+
+
       {/* Footer */}
       <Box 
         component="footer" 
