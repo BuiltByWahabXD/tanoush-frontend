@@ -12,7 +12,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useThemeContext } from '../context/themeContext';
 import { useAuth } from '../auth/AuthProvider';
 import { apiFetch } from '../api/api';
@@ -22,6 +22,7 @@ const settings = ['Profile', 'Logout'];
 
 export default function ResponsiveAppBar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { theme, toggleTheme } = useThemeContext();
   const { user, isAuthenticated, logout } = useAuth();
 
@@ -224,6 +225,8 @@ export default function ResponsiveAppBar() {
                     fontSize: '0.95rem',
                     textTransform: 'uppercase',
                     px: 2,
+                    borderBottom: location.pathname === '/products' ? `2px solid ${theme === 'dark' ? '#fff' : '#000'}` : 'none',
+                    borderRadius: 0,
                     '&:hover': {
                       backgroundColor: 'transparent',
                       opacity: 0.7,
@@ -240,6 +243,8 @@ export default function ResponsiveAppBar() {
                     fontSize: '0.95rem',
                     textTransform: 'uppercase',
                     px: 2,
+                    borderBottom: location.pathname === '/wishlist' ? `2px solid ${theme === 'dark' ? '#fff' : '#000'}` : 'none',
+                    borderRadius: 0,
                     '&:hover': {
                       backgroundColor: 'transparent',
                       opacity: 0.7,
@@ -261,6 +266,8 @@ export default function ResponsiveAppBar() {
                   fontSize: '0.95rem',
                   textTransform: 'uppercase',
                   px: 2,
+                  borderBottom: location.pathname === '/products' ? `2px solid ${theme === 'dark' ? '#fff' : '#000'}` : 'none',
+                  borderRadius: 0,
                   '&:hover': {
                     backgroundColor: 'transparent',
                     opacity: 0.7,
@@ -282,6 +289,8 @@ export default function ResponsiveAppBar() {
                     fontSize: '0.95rem',
                     textTransform: 'uppercase',
                     px: 2,
+                    borderBottom: location.pathname === '/products' ? `2px solid ${theme === 'dark' ? '#fff' : '#000'}` : 'none',
+                    borderRadius: 0,
                     '&:hover': {
                       backgroundColor: 'transparent',
                       opacity: 0.7,
@@ -298,6 +307,8 @@ export default function ResponsiveAppBar() {
                     fontSize: '0.95rem',
                     textTransform: 'uppercase',
                     px: 2,
+                    borderBottom: location.pathname === '/admin/products' ? `2px solid ${theme === 'dark' ? '#fff' : '#000'}` : 'none',
+                    borderRadius: 0,
                     '&:hover': {
                       backgroundColor: 'transparent',
                       opacity: 0.7,
@@ -314,6 +325,8 @@ export default function ResponsiveAppBar() {
                     fontSize: '0.95rem',
                     textTransform: 'uppercase',
                     px: 2,
+                    borderBottom: location.pathname === '/admin/products/new' ? `2px solid ${theme === 'dark' ? '#fff' : '#000'}` : 'none',
+                    borderRadius: 0,
                     '&:hover': {
                       backgroundColor: 'transparent',
                       opacity: 0.7,
@@ -330,6 +343,8 @@ export default function ResponsiveAppBar() {
                     fontSize: '0.95rem',
                     textTransform: 'uppercase',
                     px: 2,
+                    borderBottom: location.pathname === '/admin/users' ? `2px solid ${theme === 'dark' ? '#fff' : '#000'}` : 'none',
+                    borderRadius: 0,
                     '&:hover': {
                       backgroundColor: 'transparent',
                       opacity: 0.7,

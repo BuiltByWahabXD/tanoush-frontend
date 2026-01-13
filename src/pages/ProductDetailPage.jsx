@@ -320,7 +320,7 @@ const ProductDetailPage = () => {
                       fontSize: '1.5rem'
                     }}
                   >
-                    $ {product.price?.toFixed(2)}
+                    RS {product.price?.toFixed(2)}
                   </Typography>
 
                   {/* Description */}
@@ -399,7 +399,7 @@ const ProductDetailPage = () => {
                       <IconButton 
                         size="small" 
                         onClick={() => handleQuantityChange(-1)}
-                        disabled={quantity <= 1}
+                        disabled={quantity <= 1 }
                         sx={{ p: 1 }}
                       >
                         <RemoveIcon fontSize="small" />
@@ -417,7 +417,7 @@ const ProductDetailPage = () => {
                       <IconButton 
                         size="small" 
                         onClick={() => handleQuantityChange(1)}
-                        disabled={quantity >= (product?.stock || 99)}
+                        disabled={quantity >= (product?.stock || 0)}
                         sx={{ p: 1 }}
                       >
                         <AddIcon fontSize="small" />

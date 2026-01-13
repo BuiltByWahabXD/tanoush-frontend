@@ -15,6 +15,7 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { apiFetch } from '../api/api';
 import { useAuth } from '../auth/AuthProvider';
 
@@ -79,12 +80,18 @@ const ProductCard = ({ product }) => {
     navigate(`/products/${product._id}`);
   };
 
+  const handleAddToCart = (e) => {
+    e.stopPropagation(); // Prevent card click
+    // TODO: Implement add to cart functionality
+    console.log('Add to cart:', product._id);
+  };
+
   return (
     <>
       <Card 
         sx={{ 
           width: '100%',
-          height: '100%', 
+          height: '580px',
           display: 'flex', 
           flexDirection: 'column',
           position: 'relative',
@@ -136,15 +143,15 @@ const ProductCard = ({ product }) => {
           height: '100%'
         }}
       >
-        {/* Fixed Image Container with Aspect Ratio */}
+        {/* Fixed Image Container */}
         <Box
           sx={{
             width: '100%',
-            position: 'relative',
-            paddingTop: '133.33%', // 3:4 aspect ratio (400/300)
+            height: '300px',
             overflow: 'hidden',
             bgcolor: '#f5f5f5',
-            borderRadius: '12px 12px 0 0'
+            borderRadius: '12px 12px 0 0',
+            flexShrink: 0
           }}
         >
           <CardMedia
@@ -152,9 +159,6 @@ const ProductCard = ({ product }) => {
             image={product.images?.[0] || '/static/images/placeholder.jpg'}
             alt={product.name}
             sx={{ 
-              position: 'absolute',
-              top: 0,
-              left: 0,
               width: '100%',
               height: '100%',
               objectFit: 'cover'
@@ -168,8 +172,8 @@ const ProductCard = ({ product }) => {
             flex: '0 0 auto',
             display: 'flex',
             flexDirection: 'column',
-            p: 3,
-            height: 230
+            p: 2.5,
+            height: 210
           }}
         >
           {/* Product Name - Fixed 2 lines */}
@@ -250,6 +254,34 @@ const ProductCard = ({ product }) => {
           </Box>
         </CardContent>
       </CardActionArea>
+
+      {/* Add to Cart Button - Outside CardActionArea */}
+      <Box sx={{ px: 2.5, pb: 2.5 }}>
+        <Button
+          fullWidth
+          variant="contained"
+          startIcon={<ShoppingCartIcon />}
+          onClick={handleAddToCart}
+          disabled={product.stock === 0}
+          sx={{
+            py: 1.5,
+            textTransform: 'none',
+            fontSize: '0.95rem',
+            fontWeight: 600,
+            borderRadius: 2,
+            boxShadow: 'none',
+            '&:hover': {
+              boxShadow: '0 4px 8px rgba(0,0,0,0.15)'
+            },
+            '&:disabled': {
+              bgcolor: 'grey.300',
+              color: 'grey.600'
+            }
+          }}
+        >
+          {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+        </Button>
+      </Box>
     </Card>
 
     {/* Login Dialog for Guests */}
