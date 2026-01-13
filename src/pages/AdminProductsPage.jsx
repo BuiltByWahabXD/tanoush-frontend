@@ -170,7 +170,7 @@ const AdminProductsPage = () => {
                       </TableCell>
                       <TableCell>{product.category}</TableCell>
                       <TableCell>{product.brand || '-'}</TableCell>
-                      <TableCell align="right">${product.price?.toFixed(2)}</TableCell>
+                      <TableCell align="right">RS {product.price?.toFixed(2)}</TableCell>
                       <TableCell align="right">{product.stock ?? '-'}</TableCell>
                       <TableCell align="center">
                         <IconButton

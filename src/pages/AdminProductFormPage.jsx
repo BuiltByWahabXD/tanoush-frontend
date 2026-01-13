@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
@@ -15,10 +15,14 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CategoryIcon from '@mui/icons-material/Category';
 import { apiFetch } from '../api/api';
 import ResponsiveAppBar from '../components/AppBar';
 
@@ -228,33 +232,76 @@ const AdminProductFormPage = () => {
   return (
     <>
       <ResponsiveAppBar />
-      <Container maxWidth="md" sx={{ mt: 12, mb: 4 }}>
-        <Button
-          startIcon={<ArrowBackIcon />}
-          onClick={handleCancel}
-          sx={{ mb: 3 }}
-        >
-          Back to Products
-        </Button>
+      <Box sx={{ bgcolor: 'grey.50', minHeight: '100vh', py: 4 }}>
+        <Container maxWidth="lg" sx={{ mt: 10 }}>
+          <Button
+            startIcon={<ArrowBackIcon />}
+            onClick={handleCancel}
+            sx={{ mb: 3, fontWeight: 500 }}
+          >
+            Back to Products
+          </Button>
 
-        <Paper elevation={2} sx={{ p: 4 }}>
-          <Typography variant="h5" fontWeight="bold" gutterBottom>
-            {isEditMode ? 'Edit Product' : 'Add New Product'}
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-            {isEditMode ? 'Update product information' : 'Fill in the details to create a new product'}
-          </Typography>
+          <Paper 
+            elevation={0} 
+            sx={{ 
+              p: { xs: 3, md: 5 },
+              borderRadius: 3,
+              border: '1px solid',
+              borderColor: 'divider'
+            }}
+          >
+            {/* Header Section */}
+            <Box sx={{ mb: 4 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                <Box
+                  sx={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: 2,
+                    bgcolor: 'primary.main',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <CategoryIcon sx={{ color: 'white', fontSize: 28 }} />
+                </Box>
+                <Box>
+                  <Typography variant="h4" fontWeight="bold">
+                    {isEditMode ? 'Edit Product' : 'Add New Product'}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {isEditMode ? 'Update product information' : 'Fill in the details to create a new product'}
+                  </Typography>
+                </Box>
+              </Box>
+              <Divider sx={{ mt: 3 }} />
+            </Box>
 
-          {error && (
-            <Alert severity="error" sx={{ mb: 3 }}>
-              {error}
-            </Alert>
-          )}
+            {error && (
+              <Alert 
+                severity="error" 
+                sx={{ 
+                  mb: 3,
+                  borderRadius: 2
+                }}
+              >
+                {error}
+              </Alert>
+            )}
 
-          <Box component="form" onSubmit={handleSubmit}>
-            <Grid container spacing={3}>
-              {/* Product Name */}
-              <Grid item xs={12}>
+            <Box component="form" onSubmit={handleSubmit}>
+              <Stack spacing={4}>
+                
+                {/* PRODUCT INFORMATION */}
+                <Box>
+                  <Typography variant="h6" fontWeight={600} mb={2}>
+                    Product Information
+                  </Typography>
+                  <Divider />
+                </Box>
+
                 <TextField
                   required
                   fullWidth
@@ -262,33 +309,14 @@ const AdminProductFormPage = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  placeholder="Enter product name"
+                  placeholder="e.g., Premium Cotton T-Shirt"
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2
+                    }
+                  }}
                 />
-              </Grid>
 
-              {/* Category and Brand */}
-              <Grid item xs={12} sm={6}>
-                <FormControl required fullWidth>
-                  <InputLabel>Category</InputLabel>
-                  <Select
-                    label="Category"
-                    name="category"
-                    value={formData.category}
-                    onChange={handleInputChange}
-                  >
-                    <MenuItem value="tees">Tees</MenuItem>
-                    <MenuItem value="hoodies">Hoodies</MenuItem>
-                    <MenuItem value="graphical-hoodies">Graphical Hoodies</MenuItem>
-                    <MenuItem value="basic-hoodies">Basic Hoodies</MenuItem>
-                    <MenuItem value="mocknecks">Mocknecks</MenuItem>
-                    <MenuItem value="trousers">Trousers</MenuItem>
-                    <MenuItem value="shorts">Shorts</MenuItem>
-                    <MenuItem value="jackets">Jackets</MenuItem>
-                    <MenuItem value="coats">Coats</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={6}>
                 <TextField
                   required
                   fullWidth
@@ -297,11 +325,35 @@ const AdminProductFormPage = () => {
                   value={formData.brand}
                   onChange={handleInputChange}
                   placeholder="e.g., TANOUSH"
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2
+                    }
+                  }}
                 />
-              </Grid>
 
-              {/* Price and Stock */}
-              <Grid item xs={12} sm={6}>
+                <FormControl required fullWidth>
+                  <InputLabel>Category</InputLabel>
+                  <Select
+                    label="Category"
+                    name="category"
+                    value={formData.category}
+                    onChange={handleInputChange}
+                    sx={{ borderRadius: 2 }}
+                  >
+                    <MenuItem value="tees">Tees</MenuItem>
+                    <MenuItem value="hoodies">Hoodies</MenuItem>
+                    <MenuItem value="graphical-hoodies">Graphical Hoodies</MenuItem>
+                    <MenuItem value="basic-hoodies">Basic Hoodies</MenuItem>
+                    <MenuItem value="mocknecks">Mocknecks</MenuItem>
+                    <MenuItem value="trousers">Trousers</MenuItem>
+                    <MenuItem value="shorts">Shorts</MenuItem>
+                    <MenuItem value="jeans">Jeans</MenuItem>
+                    <MenuItem value="jackets">Jackets</MenuItem>
+                    <MenuItem value="coats">Coats</MenuItem>
+                  </Select>
+                </FormControl>
+
                 <TextField
                   required
                   fullWidth
@@ -312,9 +364,20 @@ const AdminProductFormPage = () => {
                   onChange={handleInputChange}
                   placeholder="0.00"
                   inputProps={{ min: 0, step: 0.01 }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Typography fontWeight="600" color="primary">Rs</Typography>
+                      </InputAdornment>
+                    )
+                  }}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2
+                    }
+                  }}
                 />
-              </Grid>
-              <Grid item xs={12} sm={6}>
+
                 <TextField
                   fullWidth
                   label="Stock Quantity"
@@ -324,11 +387,13 @@ const AdminProductFormPage = () => {
                   onChange={handleInputChange}
                   placeholder="0"
                   inputProps={{ min: 0 }}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2
+                    }
+                  }}
                 />
-              </Grid>
 
-              {/* Description */}
-              <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -338,49 +403,84 @@ const AdminProductFormPage = () => {
                   name="description"
                   value={formData.description}
                   onChange={handleInputChange}
-                  placeholder="Enter product description"
+                  placeholder="Provide a detailed description of the product..."
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2
+                    }
+                  }}
                 />
-              </Grid>
 
-              {/* Image Upload */}
-              <Grid item xs={12}>
-                <Typography variant="subtitle1" fontWeight="medium" gutterBottom>
-                  Product Images
-                </Typography>
+                {/* IMAGE UPLOAD */}
+                <Box>
+                  <Typography variant="h6" fontWeight={600} mb={2}>
+                    Product Images
+                  </Typography>
+                  <Divider />
+                </Box>
+
                 <Button
-                  variant="outlined"
+                  variant="contained"
                   component="label"
                   startIcon={<CloudUploadIcon />}
                   disabled={uploading}
-                  sx={{ mb: 2 }}
+                  size="large"
+                  sx={{
+                    borderRadius: 2,
+                    textTransform: 'none',
+                    py: 1.5
+                  }}
                 >
                   {uploading ? 'Uploading...' : 'Upload Images'}
                   <input
-                    type="file"
                     hidden
+                    type="file"
                     accept="image/*"
                     multiple
                     onChange={handleImageUpload}
                   />
                 </Button>
-                
+
+                {/* IMAGE PREVIEW */}
                 {uploadedImages.length > 0 && (
-                  <Grid container spacing={2} sx={{ mt: 1 }}>
-                    {uploadedImages.map((imageUrl, index) => (
-                      <Grid item xs={6} sm={4} md={3} key={index}>
-                        <Box sx={{ position: 'relative', paddingTop: '100%', border: '1px solid #ddd', borderRadius: 1, overflow: 'hidden' }}>
+                  <Box>
+                    <Typography variant="subtitle2" fontWeight={600} mb={2}>
+                      Uploaded Images ({uploadedImages.length})
+                    </Typography>
+                    <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
+                      {uploadedImages.map((img, index) => (
+                        <Box
+                          key={index}
+                          sx={{
+                            width: 120,
+                            height: 120,
+                            borderRadius: 2,
+                            overflow: 'hidden',
+                            position: 'relative',
+                            border: '2px solid',
+                            borderColor: index === 0 ? 'primary.main' : 'divider'
+                          }}
+                        >
+                          {index === 0 && (
+                            <Chip
+                              label="Primary"
+                              size="small"
+                              color="primary"
+                              sx={{
+                                position: 'absolute',
+                                top: 4,
+                                left: 4,
+                                zIndex: 2,
+                                fontWeight: 600,
+                                fontSize: '0.7rem'
+                              }}
+                            />
+                          )}
                           <Box
                             component="img"
-                            src={imageUrl}
+                            src={img}
                             alt={`Product ${index + 1}`}
-                            sx={{
-                              position: 'absolute',
-                              top: 0,
-                              left: 0,
-                              width: '100%',
-                              height: '100%',
-                              objectFit: 'cover'
-                            }}
+                            sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
                           />
                           <IconButton
                             size="small"
@@ -389,67 +489,98 @@ const AdminProductFormPage = () => {
                               position: 'absolute',
                               top: 4,
                               right: 4,
-                              bgcolor: 'rgba(255,255,255,0.9)',
-                              '&:hover': { bgcolor: 'rgba(255,255,255,1)' }
+                              bgcolor: 'error.main',
+                              color: '#fff',
+                              '&:hover': { bgcolor: 'error.dark' }
                             }}
                           >
                             <DeleteIcon fontSize="small" />
                           </IconButton>
                         </Box>
-                      </Grid>
-                    ))}
-                  </Grid>
+                      ))}
+                    </Stack>
+                  </Box>
                 )}
-              </Grid>
 
-              {/* Attributes */}
-              <Grid item xs={12} sm={6}>
+                {/* ATTRIBUTES */}
+                <Box>
+                  <Typography variant="h6" fontWeight={600} mb={2}>
+                    Size & Color Options
+                  </Typography>
+                  <Divider />
+                </Box>
+
                 <TextField
                   fullWidth
-                  label="Colors"
-                  name="color"
-                  value={formData.color}
-                  onChange={handleInputChange}
-                  placeholder="Black, White, Red"
-                  helperText="Enter comma-separated colors"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Sizes"
+                  label="Available Sizes"
                   name="size"
                   value={formData.size}
                   onChange={handleInputChange}
-                  placeholder="S, M, L, XL"
-                  helperText="Enter comma-separated sizes"
+                  placeholder="S, M, L, XL, XXL"
+                  helperText="Enter comma-separated size options"
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2
+                    }
+                  }}
                 />
-              </Grid>
 
-              {/* Action Buttons */}
-              <Grid item xs={12}>
-                <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
+                <TextField
+                  fullWidth
+                  label="Available Colors"
+                  name="color"
+                  value={formData.color}
+                  onChange={handleInputChange}
+                  placeholder="Black, White, Red, Blue"
+                  helperText="Enter comma-separated color names"
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2
+                    }
+                  }}
+                />
+
+                {/* ACTION BUTTONS */}
+                <Stack direction="row" spacing={2} justifyContent="center" sx={{ pt: 2 }}>
                   <Button
                     variant="outlined"
                     onClick={handleCancel}
                     disabled={saving}
+                    size="large"
+                    sx={{
+                      borderRadius: 2,
+                      textTransform: 'none',
+                      px: 6,
+                      fontWeight: 600,
+                      minWidth: 150
+                    }}
                   >
                     Cancel
                   </Button>
+
                   <Button
                     type="submit"
                     variant="contained"
                     startIcon={<SaveIcon />}
-                    disabled={saving}
+                    disabled={saving || !formData.name || !formData.brand || !formData.category || !formData.price || !formData.description}
+                    size="large"
+                    sx={{
+                      borderRadius: 2,
+                      textTransform: 'none',
+                      px: 6,
+                      fontWeight: 600,
+                      minWidth: 150
+                    }}
                   >
-                    {saving ? 'Saving...' : (isEditMode ? 'Update Product' : 'Create Product')}
+                    {saving ? 'Saving...' : (isEditMode ? 'Update Product' : 'Add Product')}
                   </Button>
-                </Box>
-              </Grid>
-            </Grid>
-          </Box>
-        </Paper>
-      </Container>
+                </Stack>
+
+              </Stack>
+            </Box>
+          </Paper>
+        </Container>
+      </Box>
 
       {/* Success Snackbar */}
       <Snackbar
@@ -458,7 +589,14 @@ const AdminProductFormPage = () => {
         onClose={() => setSuccessMessage('')}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert onClose={() => setSuccessMessage('')} severity="success" sx={{ width: '100%' }}>
+        <Alert 
+          onClose={() => setSuccessMessage('')} 
+          severity="success" 
+          sx={{ 
+            width: '100%',
+            borderRadius: 2
+          }}
+        >
           {successMessage}
         </Alert>
       </Snackbar>

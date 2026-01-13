@@ -10,6 +10,14 @@ import Chip from '@mui/material/Chip';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -28,6 +36,11 @@ const ProductDetailPage = () => {
   const [error, setError] = useState(null);
   const [isInWishlist, setIsInWishlist] = useState(false);
   const [wishlistLoading, setWishlistLoading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+  const [openLoginDialog, setOpenLoginDialog] = useState(false);
 
   useEffect(() => {
     fetchProduct();
@@ -39,6 +52,18 @@ const ProductDetailPage = () => {
       checkWishlistStatus();
     }
   }, [user, product]);
+
+  useEffect(() => {
+    // Set default selections when product loads
+    if (product) {
+      if (product.attributes?.color?.length > 0) {
+        setSelectedColor(product.attributes.color[0]);
+      }
+      if (product.attributes?.size?.length > 0) {
+        setSelectedSize(product.attributes.size[0]);
+      }
+    }
+  }, [product]);
 
   const checkWishlistStatus = async () => {
     try {
@@ -65,7 +90,7 @@ const ProductDetailPage = () => {
 
   const handleWishlistToggle = async () => {
     if (!user) {
-      navigate('/login');
+      setOpenLoginDialog(true);
       return;
     }
 
@@ -86,155 +111,413 @@ const ProductDetailPage = () => {
     }
   };
 
+  const handleCloseLoginDialog = () => {
+    setOpenLoginDialog(false);
+  };
+
+  const handleLoginRedirect = () => {
+    setOpenLoginDialog(false);
+    navigate('/login');
+  };
+
   const handleAddToCart = () => {
     // TODO: Implement cart functionality
     alert('Add to cart functionality - to be implemented');
   };
 
   const handleBack = () => {
-    navigate('/products');
+    navigate(-1);
+  };
+
+  const handleQuantityChange = (change) => {
+    const newQuantity = quantity + change;
+    if (newQuantity >= 1 && newQuantity <= (product?.stock || 99)) {
+      setQuantity(newQuantity);
+    }
   };
 
   return (
     <>
       <ResponsiveAppBar />
-      <Container maxWidth="lg" sx={{ mt: 12, mb: 4 }}>
-        <Button
-          startIcon={<ArrowBackIcon />}
-          onClick={handleBack}
-          sx={{ mb: 3 }}
-        >
-          Back to Products
-        </Button>
+      <Box sx={{ bgcolor: '#f5f5f5', minHeight: '100vh', pt: 10 }}>
+        <Container maxWidth="xl" sx={{ py: 3 }}>
 
-        {loading && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-            <CircularProgress />
-          </Box>
-        )}
+          {loading && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
+              <CircularProgress />
+            </Box>
+          )}
 
-        {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        )}
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
 
-        {!loading && !error && product && (
-          <Paper elevation={2} sx={{ p: 4 }}>
-            <Grid container spacing={4}>
-              {/* Product Image */}
-              <Grid item xs={12} md={6}>
-                <Box
-                  component="img"
-                  src={product.images?.[0] || '/static/images/placeholder.jpg'}
-                  alt={product.name}
-                  sx={{
-                    width: '100%',
-                    height: 'auto',
-                    maxHeight: 500,
-                    objectFit: 'cover',
-                    borderRadius: 2
-                  }}
-                />
-              </Grid>
-
-              {/* Product Info */}
-              <Grid item xs={12} md={6}>
-                <Box>
-                  <Typography variant="h4" fontWeight="bold" gutterBottom>
-                    {product.name}
-                  </Typography>
-
-                  <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-                    <Chip label={product.category} color="primary" />
-                    {product.brand && (
-                      <Chip label={product.brand} variant="outlined" />
+          {!loading && !error && product && (
+            <Grid container spacing={0}>
+              {/* Left Side - Image */}
+              <Grid item xs={12} md={6} sx={{ bgcolor: 'white', p: 0 }}>
+                <Box sx={{ position: 'relative', height: '85vh', minHeight: '500px', maxHeight: '800px' }}>
+                  {/* Main Product Image */}
+                  <Box
+                    component="img"
+                    src={product.images?.[selectedImage] || '/static/images/placeholder.jpg'}
+                    alt={product.name}
+                    sx={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover'
+                    }}
+                  />
+                  
+                  {/* Wishlist Heart */}
+                  <IconButton
+                    onClick={handleWishlistToggle}
+                    disabled={wishlistLoading}
+                    sx={{
+                      position: 'absolute',
+                      bottom: 24,
+                      right: 24,
+                      bgcolor: 'white',
+                      width: 56,
+                      height: 56,
+                      boxShadow: 2,
+                      '&:hover': {
+                        bgcolor: 'white',
+                        transform: 'scale(1.1)'
+                      }
+                    }}
+                  >
+                    {isInWishlist ? (
+                      <FavoriteIcon sx={{ color: 'error.main', fontSize: 28 }} />
+                    ) : (
+                      <FavoriteBorderIcon sx={{ fontSize: 28 }} />
                     )}
-                  </Box>
+                  </IconButton>
 
-                  <Typography variant="h5" color="primary" fontWeight="bold" sx={{ mb: 3 }}>
-                    ${product.price?.toFixed(2)}
-                  </Typography>
+                  {/* Back Button on Image */}
+                  <IconButton
+                    onClick={handleBack}
+                    sx={{
+                      position: 'absolute',
+                      top: 24,
+                      left: 24,
+                      bgcolor: 'white',
+                      width: 48,
+                      height: 48,
+                      boxShadow: 1,
+                      '&:hover': {
+                        bgcolor: 'white'
+                      }
+                    }}
+                  >
+                    <ArrowBackIcon />
+                  </IconButton>
 
-                  <Typography variant="h6" gutterBottom>
-                    Description
-                  </Typography>
-                  <Typography variant="body1" color="text.secondary" paragraph>
-                    {product.description || 'No description available.'}
-                  </Typography>
-
-                  {/* Additional Attributes */}
-                  {product.attributes && Object.keys(product.attributes).length > 0 && (
-                    <Box sx={{ mb: 3 }}>
-                      <Typography variant="h6" gutterBottom>
-                        Specifications
-                      </Typography>
-                      {Object.entries(product.attributes).map(([key, value]) => (
-                        <Box key={key} sx={{ display: 'flex', mb: 1 }}>
-                          <Typography variant="body2" fontWeight="bold" sx={{ minWidth: 120 }}>
-                            {key}:
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {value}
-                          </Typography>
+                  {/* Image Thumbnails/Scroll - Horizontal strip at bottom */}
+                  {product.images && product.images.length > 1 && (
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        bgcolor: 'rgba(255, 255, 255, 0.9)',
+                        backdropFilter: 'blur(10px)',
+                        p: 2,
+                        display: 'flex',
+                        gap: 1.5,
+                        overflowX: 'auto',
+                        '&::-webkit-scrollbar': {
+                          height: 6
+                        },
+                        '&::-webkit-scrollbar-track': {
+                          bgcolor: 'rgba(0,0,0,0.1)'
+                        },
+                        '&::-webkit-scrollbar-thumb': {
+                          bgcolor: 'rgba(0,0,0,0.3)',
+                          borderRadius: 3
+                        }
+                      }}
+                    >
+                      {product.images.map((image, index) => (
+                        <Box
+                          key={index}
+                          onClick={() => setSelectedImage(index)}
+                          sx={{
+                            minWidth: 80,
+                            height: 80,
+                            borderRadius: 1,
+                            overflow: 'hidden',
+                            cursor: 'pointer',
+                            border: '3px solid',
+                            borderColor: selectedImage === index ? 'black' : 'transparent',
+                            transition: 'all 0.3s',
+                            '&:hover': {
+                              borderColor: selectedImage === index ? 'black' : 'grey.400',
+                              transform: 'scale(1.05)'
+                            }
+                          }}
+                        >
+                          <Box
+                            component="img"
+                            src={image}
+                            alt={`${product.name} ${index + 1}`}
+                            sx={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover'
+                            }}
+                          />
                         </Box>
                       ))}
                     </Box>
                   )}
+                </Box>
+              </Grid>
 
-                  {/* Stock Status */}
-                  {product.stock !== undefined && (
-                    <Typography
-                      variant="body2"
-                      color={product.stock > 0 ? 'success.main' : 'error.main'}
-                      sx={{ mb: 2 }}
+              {/* Right Side - Product Details */}
+              <Grid item xs={12} md={6} sx={{ bgcolor: 'white', p: { xs: 3, md: 6 } }}>
+                <Box sx={{ maxWidth: 600 }}>
+                   {/* Brand Name */}
+                  {product.brand && (
+                    <Typography 
+                      variant="overline" 
+                      sx={{ 
+                        color: 'text.secondary',
+                        letterSpacing: 2,
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        display: 'block',
+                        mb: 1
+                      }}
                     >
-                      {product.stock > 0 ? `In Stock (${product.stock} available)` : 'Out of Stock'}
+                      {product.brand}
                     </Typography>
                   )}
 
-                  {/* Action Buttons */}
-                  <Box sx={{ display: 'flex', gap: 2 }}>
+                  {/* Product Name */}
+                  <Typography 
+                    variant="h4" 
+                    sx={{ 
+                      fontWeight: 300,
+                      letterSpacing: 2,
+                      textTransform: 'uppercase',
+                      mb: 3,
+                      fontSize: { xs: '1.75rem', md: '2rem' }
+                    }}
+                  >
+                    {product.name}
+                  </Typography>
+
+                  {/* Price */}
+                  <Typography 
+                    variant="h5" 
+                    sx={{ 
+                      fontWeight: 400,
+                      mb: 4,
+                      fontSize: '1.5rem'
+                    }}
+                  >
+                    $ {product.price?.toFixed(2)}
+                  </Typography>
+
+                  {/* Description */}
+                  <Box sx={{ mb: 4 }}>
+                    <Typography 
+                      variant="body2" 
+                      sx={{ 
+                        color: 'text.secondary',
+                        lineHeight: 1.8,
+                        fontSize: '0.9rem'
+                      }}
+                    >
+                      {product.description || 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s.'}
+                    </Typography>
+                  </Box>
+
+                  {/* Size Dropdown */}
+                  {product.attributes?.size && product.attributes.size.length > 0 && (
+                    <TextField
+                      select
+                      fullWidth
+                      value={selectedSize || ''}
+                      onChange={(e) => setSelectedSize(e.target.value)}
+                      label="Size"
+                      sx={{ 
+                        mb: 3,
+                        '& .MuiOutlinedInput-root': {
+                          bgcolor: '#f9f9f9'
+                        }
+                      }}
+                    >
+                      {product.attributes.size.map((size) => (
+                        <MenuItem key={size} value={size}>
+                          {size.toUpperCase()}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  )}
+
+                  {/* Color Dropdown */}
+                  {product.attributes?.color && product.attributes.color.length > 0 && (
+                    <TextField
+                      select
+                      fullWidth
+                      value={selectedColor || ''}
+                      onChange={(e) => setSelectedColor(e.target.value)}
+                      label="Color"
+                      sx={{ 
+                        mb: 3,
+                        '& .MuiOutlinedInput-root': {
+                          bgcolor: '#f9f9f9'
+                        }
+                      }}
+                    >
+                      {product.attributes.color.map((color) => (
+                        <MenuItem key={color} value={color}>
+                          {color.charAt(0).toUpperCase() + color.slice(1)}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  )}
+
+                  {/* Quantity Selector and Add to Cart */}
+                  <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+                    {/* Quantity Box */}
+                    <Box 
+                      sx={{ 
+                        display: 'flex', 
+                        alignItems: 'center',
+                        border: '1px solid',
+                        borderColor: 'divider',
+                        bgcolor: '#f9f9f9',
+                        px: 2
+                      }}
+                    >
+                      <IconButton 
+                        size="small" 
+                        onClick={() => handleQuantityChange(-1)}
+                        disabled={quantity <= 1}
+                        sx={{ p: 1 }}
+                      >
+                        <RemoveIcon fontSize="small" />
+                      </IconButton>
+                      <Typography 
+                        sx={{ 
+                          mx: 2, 
+                          minWidth: 30, 
+                          textAlign: 'center',
+                          fontWeight: 500
+                        }}
+                      >
+                        {quantity}
+                      </Typography>
+                      <IconButton 
+                        size="small" 
+                        onClick={() => handleQuantityChange(1)}
+                        disabled={quantity >= (product?.stock || 99)}
+                        sx={{ p: 1 }}
+                      >
+                        <AddIcon fontSize="small" />
+                      </IconButton>
+                    </Box>
+
+                    {/* Add to Cart Button */}
                     <Button
                       variant="contained"
-                      size="large"
-                      startIcon={<ShoppingCartIcon />}
+                      fullWidth
                       onClick={handleAddToCart}
                       disabled={product.stock === 0}
-                      sx={{ flexGrow: 1 }}
+                      sx={{ 
+                        bgcolor: 'black',
+                        color: 'white',
+                        py: 1.8,
+                        fontSize: '0.9rem',
+                        fontWeight: 600,
+                        letterSpacing: 1,
+                        textTransform: 'uppercase',
+                        '&:hover': {
+                          bgcolor: '#333'
+                        },
+                        '&:disabled': {
+                          bgcolor: 'grey.300',
+                          color: 'grey.500'
+                        }
+                      }}
                     >
                       Add to Cart
                     </Button>
-                    
-                    {user && (
-                      <IconButton
-                        color="error"
-                        onClick={handleWishlistToggle}
-                        disabled={wishlistLoading}
-                        sx={{
-                          border: '2px solid',
-                          borderColor: 'error.main',
-                          '&:hover': {
-                            bgcolor: 'error.light',
-                          }
-                        }}
-                      >
-                        {isInWishlist ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-                      </IconButton>
-                    )}
                   </Box>
+
+                  {/* Add to Wishlist Button */}
+                  <Button
+                    variant="outlined"
+                    fullWidth
+                    startIcon={isInWishlist ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                    onClick={handleWishlistToggle}
+                    disabled={wishlistLoading}
+                    sx={{ 
+                      borderColor: 'divider',
+                      color: 'text.primary',
+                      py: 1.5,
+                      fontSize: '0.9rem',
+                      fontWeight: 500,
+                      letterSpacing: 1,
+                      textTransform: 'uppercase',
+                      '&:hover': {
+                        borderColor: 'text.primary',
+                        bgcolor: 'transparent'
+                      }
+                    }}
+                  >
+                    Add to Wishlist
+                  </Button>
                 </Box>
               </Grid>
             </Grid>
-          </Paper>
-        )}
+          )}
 
-        {!loading && !error && !product && (
-          <Alert severity="warning">
-            Product not found
-          </Alert>
-        )}
-      </Container>
+          {!loading && !error && !product && (
+            <Alert severity="warning">
+              Product not found
+            </Alert>
+          )}
+        </Container>
+      </Box>
+
+      {/* Login Dialog for Guests */}
+      <Dialog 
+        open={openLoginDialog} 
+        onClose={handleCloseLoginDialog}
+        maxWidth="xs"
+        fullWidth
+      >
+        <DialogTitle sx={{ fontWeight: 600, fontSize: '1.25rem' }}>
+          Login Required
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+            Please log in to add items to your wishlist.
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button 
+            onClick={handleCloseLoginDialog}
+            sx={{ textTransform: 'none' }}
+          >
+            Cancel
+          </Button>
+          <Button 
+            onClick={handleLoginRedirect} 
+            variant="contained"
+            sx={{ textTransform: 'none' }}
+          >
+            Login
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
