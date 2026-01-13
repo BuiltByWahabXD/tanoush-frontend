@@ -18,11 +18,13 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { apiFetch } from '../api/api';
 import { useAuth } from '../auth/AuthProvider';
+import { useThemeContext } from '../context/themeContext';
 
 // Simple product card component for the catalog
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { theme } = useThemeContext();
   const [isInWishlist, setIsInWishlist] = useState(false);
   const [loading, setLoading] = useState(false);
   const [openLoginDialog, setOpenLoginDialog] = useState(false);
@@ -99,9 +101,10 @@ const ProductCard = ({ product }) => {
           borderRadius: 3,
           overflow: 'hidden',
           border: '1px solid',
-          borderColor: 'divider',
+          borderColor: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+          bgcolor: theme === 'dark' ? '#1a1a1a' : '#fff',
           '&:hover': {
-            boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
+            boxShadow: theme === 'dark' ? '0 4px 20px rgba(255,255,255,0.08)' : '0 4px 20px rgba(0,0,0,0.08)'
           }
         }}
       >
@@ -113,13 +116,13 @@ const ProductCard = ({ product }) => {
             position: 'absolute',
             top: 16,
             right: 16,
-            bgcolor: 'white',
+            bgcolor: theme === 'dark' ? '#2a2a2a' : 'white',
             border: '1px solid',
-            borderColor: 'grey.300',
+            borderColor: theme === 'dark' ? 'rgba(255,255,255,0.2)' : 'grey.300',
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
             '&:hover': {
-              bgcolor: 'white',
-              borderColor: 'grey.400'
+              bgcolor: theme === 'dark' ? '#3a3a3a' : 'white',
+              borderColor: theme === 'dark' ? 'rgba(255,255,255,0.3)' : 'grey.400'
             },
             zIndex: 2,
             width: 44,
@@ -129,7 +132,7 @@ const ProductCard = ({ product }) => {
           {isInWishlist ? (
             <FavoriteIcon sx={{ color: 'error.main', fontSize: 24 }} />
           ) : (
-            <FavoriteBorderIcon sx={{ fontSize: 24 }} />
+            <FavoriteBorderIcon sx={{ fontSize: 24, color: theme === 'dark' ? '#fff' : 'inherit' }} />
           )}
         </IconButton>
 
@@ -149,7 +152,7 @@ const ProductCard = ({ product }) => {
             width: '100%',
             height: '300px',
             overflow: 'hidden',
-            bgcolor: '#f5f5f5',
+            bgcolor: theme === 'dark' ? '#0a0a0a' : '#f5f5f5',
             borderRadius: '12px 12px 0 0',
             flexShrink: 0
           }}
@@ -191,7 +194,7 @@ const ProductCard = ({ product }) => {
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               lineHeight: 1.5,
-              color: 'text.primary'
+              color: theme === 'dark' ? '#fff' : 'text.primary'
             }}
           >
             {product.name}
@@ -229,7 +232,7 @@ const ProductCard = ({ product }) => {
               fontSize: '0.8125rem',
               fontWeight: 600,
               letterSpacing: '0.5px',
-              color: 'text.secondary',
+              color: theme === 'dark' ? 'rgba(255,255,255,0.7)' : 'text.secondary',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap'

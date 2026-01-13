@@ -18,10 +18,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import { apiFetch } from '../api/api';
 import ProductCard from '../components/ProductCard';
 import ResponsiveAppBar from '../components/AppBar';
+import { useThemeContext } from '../context/themeContext';
 import '../styles/products.css';
 
 // Main product listing page with filters and search
 const ProductListingPage = () => {
+  const { theme } = useThemeContext();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -286,7 +288,12 @@ const ProductListingPage = () => {
   return (
     <>
       <ResponsiveAppBar />
-      <Container maxWidth="xl" sx={{ mt: 12, mb: 4 }}>
+      <Box sx={{ 
+        minHeight: '100vh',
+        bgcolor: theme === 'dark' ? '#000' : '#fff',
+        color: theme === 'dark' ? '#fff' : '#000'
+      }}>
+      <Container maxWidth="xl" sx={{ mt: 12, mb: 4, pt: 2 }}>
         {/* Filter and Sort Bar */}
         <Box sx={{ 
           mb: 4, 
@@ -295,11 +302,11 @@ const ProductListingPage = () => {
           gap: 2,
           flexWrap: 'wrap',
           borderBottom: '1px solid',
-          borderColor: 'divider',
+          borderColor: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
           pb: 2
         }}>
           {/* Filter Label */}
-          <Typography variant="body1" sx={{ fontWeight: 500 }}>
+          <Typography variant="body1" sx={{ fontWeight: 500, color: theme === 'dark' ? '#fff' : '#000' }}>
             Filter:
           </Typography>
 
@@ -310,10 +317,10 @@ const ProductListingPage = () => {
                 onClick={(e) => setAnchorElCategory(e.currentTarget)}
                 endIcon={<KeyboardArrowDownIcon />}
                 sx={{
-                  color: 'text.primary',
+                  color: theme === 'dark' ? '#fff' : '#000',
                   textTransform: 'none',
                   borderBottom: '1px solid',
-                  borderColor: selectedCategories.length > 0 ? 'primary.main' : 'text.primary',
+                  borderColor: selectedCategories.length > 0 ? 'primary.main' : (theme === 'dark' ? '#fff' : '#000'),
                   borderRadius: 0,
                   px: 1,
                   minWidth: 'auto',
@@ -369,10 +376,10 @@ const ProductListingPage = () => {
                 onClick={(e) => setAnchorElBrand(e.currentTarget)}
                 endIcon={<KeyboardArrowDownIcon />}
                 sx={{
-                  color: 'text.primary',
+                  color: theme === 'dark' ? '#fff' : '#000',
                   textTransform: 'none',
                   borderBottom: '1px solid',
-                  borderColor: selectedBrands.length > 0 ? 'primary.main' : 'text.primary',
+                  borderColor: selectedBrands.length > 0 ? 'primary.main' : (theme === 'dark' ? '#fff' : '#000'),
                   borderRadius: 0,
                   px: 1,
                   minWidth: 'auto',
@@ -428,10 +435,10 @@ const ProductListingPage = () => {
                 onClick={(e) => setAnchorElColor(e.currentTarget)}
                 endIcon={<KeyboardArrowDownIcon />}
                 sx={{
-                  color: 'text.primary',
+                  color: theme === 'dark' ? '#fff' : '#000',
                   textTransform: 'none',
                   borderBottom: '1px solid',
-                  borderColor: selectedColors.length > 0 ? 'primary.main' : 'text.primary',
+                  borderColor: selectedColors.length > 0 ? 'primary.main' : (theme === 'dark' ? '#fff' : '#000'),
                   borderRadius: 0,
                   px: 1,
                   minWidth: 'auto',
@@ -487,10 +494,10 @@ const ProductListingPage = () => {
                 onClick={(e) => setAnchorElSize(e.currentTarget)}
                 endIcon={<KeyboardArrowDownIcon />}
                 sx={{
-                  color: 'text.primary',
+                  color: theme === 'dark' ? '#fff' : '#000',
                   textTransform: 'none',
                   borderBottom: '1px solid',
-                  borderColor: selectedSizes.length > 0 ? 'primary.main' : 'text.primary',
+                  borderColor: selectedSizes.length > 0 ? 'primary.main' : (theme === 'dark' ? '#fff' : '#000'),
                   borderRadius: 0,
                   px: 1,
                   minWidth: 'auto',
@@ -545,10 +552,10 @@ const ProductListingPage = () => {
               onClick={(e) => setAnchorElAvailability(e.currentTarget)}
               endIcon={<KeyboardArrowDownIcon />}
               sx={{
-                color: 'text.primary',
+                color: theme === 'dark' ? '#fff' : '#000',
                 textTransform: 'none',
                 borderBottom: '1px solid',
-                borderColor: 'text.primary',
+                borderColor: theme === 'dark' ? '#fff' : '#000',
                 borderRadius: 0,
                 px: 1,
                 minWidth: 'auto',
@@ -612,10 +619,10 @@ const ProductListingPage = () => {
               onClick={(e) => setAnchorElPrice(e.currentTarget)}
               endIcon={<KeyboardArrowDownIcon />}
               sx={{
-                color: 'text.primary',
+                color: theme === 'dark' ? '#fff' : '#000',
                 textTransform: 'none',
                 borderBottom: '1px solid',
-                borderColor: 'text.primary',
+                borderColor: theme === 'dark' ? '#fff' : '#000',
                 borderRadius: 0,
                 px: 1,
                 minWidth: 'auto',
@@ -686,10 +693,10 @@ const ProductListingPage = () => {
               onClick={(e) => setAnchorElSort(e.currentTarget)}
               endIcon={<KeyboardArrowDownIcon />}
               sx={{
-                color: 'text.primary',
+                color: theme === 'dark' ? '#fff' : '#000',
                 textTransform: 'none',
                 borderBottom: '1px solid',
-                borderColor: 'text.primary',
+                borderColor: theme === 'dark' ? '#fff' : '#000',
                 borderRadius: 0,
                 px: 1,
                 minWidth: 'auto',
@@ -755,7 +762,7 @@ const ProductListingPage = () => {
           )}
 
           {/* Product Count */}
-          <Typography variant="body1" color="text.secondary">
+          <Typography variant="body1" sx={{ color: theme === 'dark' ? 'rgba(255,255,255,0.7)' : 'text.secondary' }}>
             {filteredProducts.length} product{filteredProducts.length !== 1 ? 's' : ''}
           </Typography>
         </Box>
@@ -763,7 +770,7 @@ const ProductListingPage = () => {
         {/* Active Filters Display */}
         {getActiveFilterCount() > 0 && (
           <Box sx={{ mb: 3, display: 'flex', flexWrap: 'wrap', gap: 1, alignItems: 'center' }}>
-            <Typography variant="body2" sx={{ fontWeight: 500 }}>
+            <Typography variant="body2" sx={{ fontWeight: 500, color: theme === 'dark' ? '#fff' : '#000' }}>
               Active Filters:
             </Typography>
             {selectedCategories.map(category => (
@@ -890,6 +897,7 @@ const ProductListingPage = () => {
           </Grid>
         )}
       </Container>
+      </Box>
     </>
   );
 };

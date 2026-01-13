@@ -12,9 +12,11 @@ import {
 import ResponsiveAppBar from '../components/AppBar';
 import ProductCard from '../components/ProductCard';
 import { apiFetch } from '../api/api';
+import { useThemeContext } from '../context/themeContext';
 
 export default function WishlistPage() {
   const navigate = useNavigate();
+  const { theme } = useThemeContext();
   const [wishlistItems, setWishlistItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -57,9 +59,14 @@ export default function WishlistPage() {
     return (
       <>
         <ResponsiveAppBar />
-        <Container sx={{ mt: 4, display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
-          <CircularProgress />
-        </Container>
+        <Box sx={{ 
+          minHeight: '100vh',
+          bgcolor: theme === 'dark' ? '#000' : '#fff'
+        }}>
+          <Container sx={{ mt: 4, display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+            <CircularProgress />
+          </Container>
+        </Box>
       </>
     );
   }
@@ -67,8 +74,13 @@ export default function WishlistPage() {
   return (
     <>
       <ResponsiveAppBar />
-      <Container sx={{ mt: 4, mb: 6 }}>
-        <Typography variant="h4" gutterBottom sx={{ fontWeight: 600, mb: 3,color: 'primary.main' }}>
+      <Box sx={{ 
+        minHeight: '100vh',
+        bgcolor: theme === 'dark' ? '#000' : '#fff',
+        color: theme === 'dark' ? '#fff' : '#000'
+      }}>
+      <Container sx={{ mt: 12, mb: 6, pt: 2 }}>
+        <Typography variant="h4" gutterBottom sx={{ fontWeight: 600, mb: 3, color: theme === 'dark' ? '#fff' : '#000' }}>
           My Wishlist
         </Typography>
 
@@ -107,6 +119,7 @@ export default function WishlistPage() {
           </Grid>
         )}
       </Container>
+      </Box>
     </>
   );
 }

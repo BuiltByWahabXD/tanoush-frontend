@@ -10,11 +10,13 @@ import CardMedia from "@mui/material/CardMedia";
 import Avatar from "@mui/material/Avatar";
 import Rating from "@mui/material/Rating";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
+import { useThemeContext } from '../context/themeContext';
 import "../styles/landingPage.css";
 
 // Landing page with hero banner - serves as home page
 const LandingPage = () => {
   const navigate = useNavigate();
+  const { theme } = useThemeContext();
   const [currentReview, setCurrentReview] = useState(0);
   const scrollContainerRef = useRef(null);
 
@@ -101,19 +103,22 @@ const LandingPage = () => {
         />
       
       {/* About Section */}
-      <Container maxWidth="lg" sx={{ py: 8 }}>
+      <Container maxWidth="lg" sx={{ py: 8, bgcolor: theme === 'dark' ? '#000' : '#fff' }}>
         <Box sx={{ textAlign: 'center', mb: 6 }}>
           <Typography 
             variant="h3" 
             fontWeight="bold" 
             gutterBottom
-            sx={{ fontSize: { xs: '2rem', md: '3rem' } }}
+            sx={{ 
+              fontSize: { xs: '2rem', md: '3rem' },
+              color: theme === 'dark' ? '#fff' : 'inherit'
+            }}
           >
             About Tanoush
           </Typography>
           <Typography 
             variant="h6" 
-            color="text.secondary" 
+            sx={{ color: theme === 'dark' ? 'rgba(255,255,255,0.7)' : 'text.secondary' }} 
             sx={{ 
               maxWidth: '800px', 
               mx: 'auto',
@@ -135,10 +140,10 @@ const LandingPage = () => {
               <Typography variant="h4" fontWeight="bold" color="primary" gutterBottom>
                 100+
               </Typography>
-              <Typography variant="h6" fontWeight="600" gutterBottom>
+              <Typography variant="h6" fontWeight="600" gutterBottom sx={{ color: theme === 'dark' ? '#fff' : 'inherit' }}>
                 Products
               </Typography>
-              <Typography variant="body1" color="text.secondary">
+              <Typography variant="body1" sx={{ color: theme === 'dark' ? 'rgba(255,255,255,0.7)' : 'text.secondary' }}>
                 Wide range of clothing for every occasion
               </Typography>
             </Box>
@@ -148,10 +153,10 @@ const LandingPage = () => {
               <Typography variant="h4" fontWeight="bold" color="primary" gutterBottom>
                 Premium
               </Typography>
-              <Typography variant="h6" fontWeight="600" gutterBottom>
+              <Typography variant="h6" fontWeight="600" gutterBottom sx={{ color: theme === 'dark' ? '#fff' : 'inherit' }}>
                 Quality
               </Typography>
-              <Typography variant="body1" color="text.secondary">
+              <Typography variant="body1" sx={{ color: theme === 'dark' ? 'rgba(255,255,255,0.7)' : 'text.secondary' }}>
                 Only the finest materials and craftsmanship
               </Typography>
             </Box>
@@ -161,10 +166,10 @@ const LandingPage = () => {
               <Typography variant="h4" fontWeight="bold" color="primary" gutterBottom>
                 Fast
               </Typography>
-              <Typography variant="h6" fontWeight="600" gutterBottom>
+              <Typography variant="h6" fontWeight="600" gutterBottom sx={{ color: theme === 'dark' ? '#fff' : 'inherit' }}>
                 Delivery
               </Typography>
-              <Typography variant="body1" color="text.secondary">
+              <Typography variant="body1" sx={{ color: theme === 'dark' ? 'rgba(255,255,255,0.7)' : 'text.secondary' }}>
                 Quick and reliable shipping nationwide
               </Typography>
             </Box>
@@ -173,14 +178,18 @@ const LandingPage = () => {
       </Container>
 
       {/* Collection Showcase */}
-      <Box sx={{ bgcolor: 'grey.50', py: 8 }}>
+      <Box sx={{ bgcolor: theme === 'dark' ? '#0a0a0a' : 'grey.50', py: 8 }}>
         <Container maxWidth="lg">
           <Typography 
             variant="h3" 
             fontWeight="bold" 
             textAlign="center" 
             gutterBottom
-            sx={{ mb: 6, fontSize: { xs: '2rem', md: '3rem' } }}
+            sx={{ 
+              mb: 6, 
+              fontSize: { xs: '2rem', md: '3rem' },
+              color: theme === 'dark' ? '#fff' : 'inherit'
+            }}
           >
             Our Collections
           </Typography>
@@ -578,22 +587,30 @@ const LandingPage = () => {
       </Box>
 
       {/* Customer Reviews Section */}
-      <Box sx={{ py: 8 }}>
+      <Box sx={{ py: 8, bgcolor: theme === 'dark' ? '#000' : '#fff' }}>
         <Container maxWidth="lg">
           <Typography 
             variant="h3" 
             fontWeight="bold" 
             textAlign="center" 
             gutterBottom
-            sx={{ mb: 2, fontSize: { xs: '2rem', md: '3rem' } }}
+            sx={{ 
+              mb: 2, 
+              fontSize: { xs: '2rem', md: '3rem' },
+              color: theme === 'dark' ? '#fff' : 'inherit'
+            }}
           >
             What Our Customers Say
           </Typography>
           <Typography 
             variant="body1" 
             textAlign="center" 
-            color="text.secondary"
-            sx={{ mb: 6, maxWidth: '600px', mx: 'auto' }}
+            sx={{ 
+              mb: 6, 
+              maxWidth: '600px', 
+              mx: 'auto',
+              color: theme === 'dark' ? 'rgba(255,255,255,0.7)' : 'text.secondary'
+            }}
           >
             Real reviews from real customers who love our products
           </Typography>
@@ -621,7 +638,8 @@ const LandingPage = () => {
                   p: 4,
                   borderRadius: 3,
                   border: '1px solid',
-                  borderColor: 'divider',
+                  borderColor: theme === 'dark' ? 'rgba(255,255,255,0.2)' : 'divider',
+                  bgcolor: theme === 'dark' ? '#1a1a1a' : '#fff',
                   position: 'relative',
                   transition: 'all 0.3s ease',
                   '&:hover': {
@@ -648,7 +666,7 @@ const LandingPage = () => {
                     sx={{ width: 56, height: 56, mr: 2 }}
                   />
                   <Box>
-                    <Typography variant="h6" fontWeight="600">
+                    <Typography variant="h6" fontWeight="600" sx={{ color: theme === 'dark' ? '#fff' : 'inherit' }}>
                       {review.name}
                     </Typography>
                     <Rating 
@@ -662,8 +680,8 @@ const LandingPage = () => {
                 
                 <Typography 
                   variant="body2" 
-                  color="text.secondary"
                   sx={{ 
+                    color: theme === 'dark' ? 'rgba(255,255,255,0.7)' : 'text.secondary',
                     lineHeight: 1.7,
                     fontStyle: 'italic'
                   }}
@@ -682,7 +700,7 @@ const LandingPage = () => {
       <Box 
         component="footer" 
         sx={{ 
-          bgcolor: 'grey.900', 
+          bgcolor: theme === 'dark' ? '#0a0a0a' : 'grey.900', 
           color: 'white', 
           py: 6,
           mt: 8

@@ -24,6 +24,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { apiFetch } from '../api/api';
 import { useAuth } from '../auth/AuthProvider';
+import { useThemeContext } from '../context/themeContext';
 import ResponsiveAppBar from '../components/AppBar';
 
 // Product detail page - shows single product information
@@ -31,6 +32,7 @@ const ProductDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { theme } = useThemeContext();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -139,7 +141,7 @@ const ProductDetailPage = () => {
   return (
     <>
       <ResponsiveAppBar />
-      <Box sx={{ bgcolor: '#f5f5f5', minHeight: '100vh', pt: 10 }}>
+      <Box sx={{ bgcolor: theme === 'dark' ? '#000' : '#f5f5f5', minHeight: '100vh', pt: 10 }}>
         <Container maxWidth="xl" sx={{ py: 3 }}>
 
           {loading && (
@@ -157,7 +159,7 @@ const ProductDetailPage = () => {
           {!loading && !error && product && (
             <Grid container spacing={0}>
               {/* Left Side - Image */}
-              <Grid item xs={12} md={6} sx={{ bgcolor: 'white', p: 0 }}>
+              <Grid item xs={12} md={6} sx={{ bgcolor: theme === 'dark' ? '#0a0a0a' : 'white', p: 0 }}>
                 <Box sx={{ position: 'relative', height: '85vh', minHeight: '500px', maxHeight: '800px' }}>
                   {/* Main Product Image */}
                   <Box
@@ -177,14 +179,15 @@ const ProductDetailPage = () => {
                     disabled={wishlistLoading}
                     sx={{
                       position: 'absolute',
-                      bottom: 24,
+                      bottom: 140,
                       right: 24,
-                      bgcolor: 'white',
+                      bgcolor: theme === 'dark' ? '#2a2a2a' : 'white',
                       width: 56,
                       height: 56,
                       boxShadow: 2,
+                      zIndex: 10,
                       '&:hover': {
-                        bgcolor: 'white',
+                        bgcolor: theme === 'dark' ? '#3a3a3a' : 'white',
                         transform: 'scale(1.1)'
                       }
                     }}
@@ -192,7 +195,7 @@ const ProductDetailPage = () => {
                     {isInWishlist ? (
                       <FavoriteIcon sx={{ color: 'error.main', fontSize: 28 }} />
                     ) : (
-                      <FavoriteBorderIcon sx={{ fontSize: 28 }} />
+                      <FavoriteBorderIcon sx={{ fontSize: 28, color: theme === 'dark' ? '#fff' : 'inherit' }} />
                     )}
                   </IconButton>
 
@@ -203,16 +206,16 @@ const ProductDetailPage = () => {
                       position: 'absolute',
                       top: 24,
                       left: 24,
-                      bgcolor: 'white',
+                      bgcolor: theme === 'dark' ? '#2a2a2a' : 'white',
                       width: 48,
                       height: 48,
                       boxShadow: 1,
                       '&:hover': {
-                        bgcolor: 'white'
+                        bgcolor: theme === 'dark' ? '#3a3a3a' : 'white'
                       }
                     }}
                   >
-                    <ArrowBackIcon />
+                    <ArrowBackIcon sx={{ color: theme === 'dark' ? '#fff' : 'inherit' }} />
                   </IconButton>
 
                   {/* Image Thumbnails/Scroll - Horizontal strip at bottom */}
@@ -223,8 +226,7 @@ const ProductDetailPage = () => {
                         bottom: 0,
                         left: 0,
                         right: 0,
-                        bgcolor: 'rgba(255, 255, 255, 0.9)',
-                        backdropFilter: 'blur(10px)',
+                        bgcolor: theme === 'dark' ? 'rgba(42, 42, 42, 0.95)' : 'rgba(255, 255, 255, 0.95)',
                         p: 2,
                         display: 'flex',
                         gap: 1.5,
@@ -252,10 +254,10 @@ const ProductDetailPage = () => {
                             overflow: 'hidden',
                             cursor: 'pointer',
                             border: '3px solid',
-                            borderColor: selectedImage === index ? 'black' : 'transparent',
+                            borderColor: selectedImage === index ? (theme === 'dark' ? '#fff' : 'black') : 'transparent',
                             transition: 'all 0.3s',
                             '&:hover': {
-                              borderColor: selectedImage === index ? 'black' : 'grey.400',
+                              borderColor: selectedImage === index ? (theme === 'dark' ? '#fff' : 'black') : 'grey.400',
                               transform: 'scale(1.05)'
                             }
                           }}
@@ -278,14 +280,14 @@ const ProductDetailPage = () => {
               </Grid>
 
               {/* Right Side - Product Details */}
-              <Grid item xs={12} md={6} sx={{ bgcolor: 'white', p: { xs: 3, md: 6 } }}>
+              <Grid item xs={12} md={6} sx={{ bgcolor: theme === 'dark' ? '#1a1a1a' : 'white', p: { xs: 3, md: 6 } }}>
                 <Box sx={{ maxWidth: 600 }}>
                    {/* Brand Name */}
                   {product.brand && (
                     <Typography 
                       variant="overline" 
                       sx={{ 
-                        color: 'text.secondary',
+                        color: theme === 'dark' ? 'rgba(255,255,255,0.7)' : 'text.secondary',
                         letterSpacing: 2,
                         fontSize: '0.75rem',
                         fontWeight: 600,
@@ -305,7 +307,8 @@ const ProductDetailPage = () => {
                       letterSpacing: 2,
                       textTransform: 'uppercase',
                       mb: 3,
-                      fontSize: { xs: '1.75rem', md: '2rem' }
+                      fontSize: { xs: '1.75rem', md: '2rem' },
+                      color: theme === 'dark' ? '#fff' : 'text.primary'
                     }}
                   >
                     {product.name}
@@ -317,7 +320,8 @@ const ProductDetailPage = () => {
                     sx={{ 
                       fontWeight: 400,
                       mb: 4,
-                      fontSize: '1.5rem'
+                      fontSize: '1.5rem',
+                      color: theme === 'dark' ? '#fff' : 'text.primary'
                     }}
                   >
                     RS {product.price?.toFixed(2)}
@@ -328,7 +332,7 @@ const ProductDetailPage = () => {
                     <Typography 
                       variant="body2" 
                       sx={{ 
-                        color: 'text.secondary',
+                        color: theme === 'dark' ? 'rgba(255,255,255,0.7)' : 'text.secondary',
                         lineHeight: 1.8,
                         fontSize: '0.9rem'
                       }}
@@ -348,7 +352,14 @@ const ProductDetailPage = () => {
                       sx={{ 
                         mb: 3,
                         '& .MuiOutlinedInput-root': {
-                          bgcolor: '#f9f9f9'
+                          bgcolor: theme === 'dark' ? '#2a2a2a' : '#f9f9f9',
+                          color: theme === 'dark' ? '#fff' : 'inherit',
+                          '& fieldset': {
+                            borderColor: theme === 'dark' ? 'rgba(255,255,255,0.2)' : 'inherit'
+                          }
+                        },
+                        '& .MuiInputLabel-root': {
+                          color: theme === 'dark' ? 'rgba(255,255,255,0.7)' : 'inherit'
                         }
                       }}
                     >
@@ -371,7 +382,14 @@ const ProductDetailPage = () => {
                       sx={{ 
                         mb: 3,
                         '& .MuiOutlinedInput-root': {
-                          bgcolor: '#f9f9f9'
+                          bgcolor: theme === 'dark' ? '#2a2a2a' : '#f9f9f9',
+                          color: theme === 'dark' ? '#fff' : 'inherit',
+                          '& fieldset': {
+                            borderColor: theme === 'dark' ? 'rgba(255,255,255,0.2)' : 'inherit'
+                          }
+                        },
+                        '& .MuiInputLabel-root': {
+                          color: theme === 'dark' ? 'rgba(255,255,255,0.7)' : 'inherit'
                         }
                       }}
                     >
@@ -391,8 +409,8 @@ const ProductDetailPage = () => {
                         display: 'flex', 
                         alignItems: 'center',
                         border: '1px solid',
-                        borderColor: 'divider',
-                        bgcolor: '#f9f9f9',
+                        borderColor: theme === 'dark' ? 'rgba(255,255,255,0.2)' : 'divider',
+                        bgcolor: theme === 'dark' ? '#2a2a2a' : '#f9f9f9',
                         px: 2
                       }}
                     >
@@ -400,7 +418,10 @@ const ProductDetailPage = () => {
                         size="small" 
                         onClick={() => handleQuantityChange(-1)}
                         disabled={quantity <= 1 }
-                        sx={{ p: 1 }}
+                        sx={{ 
+                          p: 1,
+                          color: theme === 'dark' ? '#fff' : 'inherit'
+                        }}
                       >
                         <RemoveIcon fontSize="small" />
                       </IconButton>
@@ -409,7 +430,8 @@ const ProductDetailPage = () => {
                           mx: 2, 
                           minWidth: 30, 
                           textAlign: 'center',
-                          fontWeight: 500
+                          fontWeight: 500,
+                          color: theme === 'dark' ? '#fff' : 'inherit'
                         }}
                       >
                         {quantity}
@@ -418,7 +440,10 @@ const ProductDetailPage = () => {
                         size="small" 
                         onClick={() => handleQuantityChange(1)}
                         disabled={quantity >= (product?.stock || 0)}
-                        sx={{ p: 1 }}
+                        sx={{ 
+                          p: 1,
+                          color: theme === 'dark' ? '#fff' : 'inherit'
+                        }}
                       >
                         <AddIcon fontSize="small" />
                       </IconButton>
@@ -431,15 +456,15 @@ const ProductDetailPage = () => {
                       onClick={handleAddToCart}
                       disabled={product.stock === 0}
                       sx={{ 
-                        bgcolor: 'black',
-                        color: 'white',
+                        bgcolor: theme === 'dark' ? '#fff' : 'black',
+                        color: theme === 'dark' ? '#000' : 'white',
                         py: 1.8,
                         fontSize: '0.9rem',
                         fontWeight: 600,
                         letterSpacing: 1,
                         textTransform: 'uppercase',
                         '&:hover': {
-                          bgcolor: '#333'
+                          bgcolor: theme === 'dark' ? '#e0e0e0' : '#333'
                         },
                         '&:disabled': {
                           bgcolor: 'grey.300',
@@ -459,15 +484,15 @@ const ProductDetailPage = () => {
                     onClick={handleWishlistToggle}
                     disabled={wishlistLoading}
                     sx={{ 
-                      borderColor: 'divider',
-                      color: 'text.primary',
+                      borderColor: theme === 'dark' ? 'rgba(255,255,255,0.2)' : 'divider',
+                      color: theme === 'dark' ? '#fff' : 'text.primary',
                       py: 1.5,
                       fontSize: '0.9rem',
                       fontWeight: 500,
                       letterSpacing: 1,
                       textTransform: 'uppercase',
                       '&:hover': {
-                        borderColor: 'text.primary',
+                        borderColor: theme === 'dark' ? '#fff' : 'text.primary',
                         bgcolor: 'transparent'
                       }
                     }}
@@ -493,26 +518,47 @@ const ProductDetailPage = () => {
         onClose={handleCloseLoginDialog}
         maxWidth="xs"
         fullWidth
+        PaperProps={{
+          sx: {
+            bgcolor: theme === 'dark' ? '#1a1a1a' : '#fff'
+          }
+        }}
       >
-        <DialogTitle sx={{ fontWeight: 600, fontSize: '1.25rem' }}>
+        <DialogTitle sx={{ 
+          fontWeight: 600, 
+          fontSize: '1.25rem',
+          color: theme === 'dark' ? '#fff' : 'inherit'
+        }}>
           Login Required
         </DialogTitle>
         <DialogContent>
-          <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+          <Typography variant="body1" sx={{ 
+            color: theme === 'dark' ? 'rgba(255,255,255,0.7)' : 'text.secondary'
+          }}>
             Please log in to add items to your wishlist.
           </Typography>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
           <Button 
             onClick={handleCloseLoginDialog}
-            sx={{ textTransform: 'none' }}
+            sx={{ 
+              textTransform: 'none',
+              color: theme === 'dark' ? '#fff' : 'inherit'
+            }}
           >
             Cancel
           </Button>
           <Button 
             onClick={handleLoginRedirect} 
             variant="contained"
-            sx={{ textTransform: 'none' }}
+            sx={{ 
+              textTransform: 'none',
+              bgcolor: theme === 'dark' ? '#fff' : 'black',
+              color: theme === 'dark' ? '#000' : 'white',
+              '&:hover': {
+                bgcolor: theme === 'dark' ? '#e0e0e0' : '#333'
+              }
+            }}
           >
             Login
           </Button>
