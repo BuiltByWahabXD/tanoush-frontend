@@ -118,8 +118,8 @@ const LandingPage = () => {
           </Typography>
           <Typography 
             variant="h6" 
-            sx={{ color: theme === 'dark' ? 'rgba(255,255,255,0.7)' : 'text.secondary' }} 
             sx={{ 
+              color: theme === 'dark' ? 'rgba(255,255,255,0.7)' : 'text.secondary',  
               maxWidth: '800px', 
               mx: 'auto',
               lineHeight: 1.8,
