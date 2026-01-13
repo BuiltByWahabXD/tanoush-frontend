@@ -141,13 +141,15 @@ const AdminUsersPage = () => {
                         />
                       </TableCell>
                       <TableCell align="right">
-                        <IconButton
-                          color="error"
-                          onClick={() => handleDeleteClick(user)}
-                          title="Delete user"
-                        >
-                          <DeleteIcon />
-                        </IconButton>
+                        {user.role !== 'admin' && (
+                          <IconButton
+                            color="error"
+                            onClick={() => handleDeleteClick(user)}
+                            title="Delete user"
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))

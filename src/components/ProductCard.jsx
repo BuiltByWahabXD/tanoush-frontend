@@ -8,6 +8,11 @@ import CardActionArea from '@mui/material/CardActionArea';
 import Chip from '@mui/material/Chip';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { apiFetch } from '../api/api';
@@ -19,6 +24,7 @@ const ProductCard = ({ product }) => {
   const { user } = useAuth();
   const [isInWishlist, setIsInWishlist] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [openLoginDialog, setOpenLoginDialog] = useState(false);
 
   useEffect(() => {
     // Check if product is in wishlist when user is logged in
@@ -40,7 +46,7 @@ const ProductCard = ({ product }) => {
     e.stopPropagation(); // Prevent card click
     
     if (!user) {
-      navigate('/login');
+      setOpenLoginDialog(true);
       return;
     }
 
@@ -60,79 +66,224 @@ const ProductCard = ({ product }) => {
     }
   };
 
+  const handleCloseDialog = () => {
+    setOpenLoginDialog(false);
+  };
+
+  const handleLoginRedirect = () => {
+    setOpenLoginDialog(false);
+    navigate('/login');
+  };
+
   const handleClick = () => {
     navigate(`/products/${product._id}`);
   };
 
   return (
-    <Card 
-      sx={{ 
-        height: '100%', 
-        display: 'flex', 
-        flexDirection: 'column',
-        position: 'relative',
-        transition: 'transform 0.2s',
-        '&:hover': {
-          transform: 'translateY(-4px)',
-          boxShadow: 3
-        }
-      }}
-    >
-      {/* Favorite Icon */}
-      {user && (
+    <>
+      <Card 
+        sx={{ 
+          width: '100%',
+          height: '100%', 
+          display: 'flex', 
+          flexDirection: 'column',
+          position: 'relative',
+          transition: 'all 0.3s ease',
+          borderRadius: 3,
+          overflow: 'hidden',
+          border: '1px solid',
+          borderColor: 'divider',
+          '&:hover': {
+            boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
+          }
+        }}
+      >
+        {/* Favorite Icon - Always visible */}
         <IconButton
           onClick={handleWishlistToggle}
           disabled={loading}
           sx={{
             position: 'absolute',
-            top: 8,
-            right: 8,
-            bgcolor: 'background.paper',
+            top: 16,
+            right: 16,
+            bgcolor: 'white',
+            border: '1px solid',
+            borderColor: 'grey.300',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
             '&:hover': {
-              bgcolor: 'background.paper',
+              bgcolor: 'white',
+              borderColor: 'grey.400'
             },
-            zIndex: 1
+            zIndex: 2,
+            width: 44,
+            height: 44
           }}
         >
           {isInWishlist ? (
-            <FavoriteIcon color="error" />
+            <FavoriteIcon sx={{ color: 'error.main', fontSize: 24 }} />
           ) : (
-            <FavoriteBorderIcon />
+            <FavoriteBorderIcon sx={{ fontSize: 24 }} />
           )}
         </IconButton>
-      )}
 
-      <CardActionArea onClick={handleClick} sx={{ flexGrow: 1 }}>
-        <CardMedia
-          component="img"
-          height="200"
-          image={product.images?.[0] || '/static/images/placeholder.jpg'}
-          alt={product.name}
-          sx={{ objectFit: 'cover' }}
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h6" component="div" noWrap>
+      <CardActionArea 
+        onClick={handleClick} 
+        sx={{ 
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'stretch',
+          height: '100%'
+        }}
+      >
+        {/* Fixed Image Container with Aspect Ratio */}
+        <Box
+          sx={{
+            width: '100%',
+            position: 'relative',
+            paddingTop: '133.33%', // 3:4 aspect ratio (400/300)
+            overflow: 'hidden',
+            bgcolor: '#f5f5f5',
+            borderRadius: '12px 12px 0 0'
+          }}
+        >
+          <CardMedia
+            component="img"
+            image={product.images?.[0] || '/static/images/placeholder.jpg'}
+            alt={product.name}
+            sx={{ 
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover'
+            }}
+          />
+        </Box>
+
+        {/* Content Container with Fixed Height */}
+        <CardContent 
+          sx={{ 
+            flex: '0 0 auto',
+            display: 'flex',
+            flexDirection: 'column',
+            p: 3,
+            height: 230
+          }}
+        >
+          {/* Product Name - Fixed 2 lines */}
+          <Typography 
+            variant="h6" 
+            component="div" 
+            sx={{
+              fontWeight: 600,
+              fontSize: '1.125rem',
+              mb: 2,
+              height: 54,
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              lineHeight: 1.5,
+              color: 'text.primary'
+            }}
+          >
             {product.name}
           </Typography>
           
-          <Chip 
-            label={product.category} 
-            size="small" 
-            sx={{ mb: 1 }}
-            color="primary"
-            variant="outlined"
-          />
+          {/* Category Chip - Fixed height */}
+          <Box sx={{ mb: 2, height: 28 }}>
+            <Chip 
+              label={product.category} 
+              size="small" 
+              sx={{
+                textTransform: 'capitalize',
+                fontWeight: 500,
+                borderRadius: 1,
+                bgcolor: 'primary.50',
+                color: 'primary.main',
+                border: '1px solid',
+                borderColor: 'primary.main',
+                fontSize: '0.8125rem',
+                height: 28,
+                '& .MuiChip-label': {
+                  px: 1.5
+                }
+              }}
+            />
+          </Box>
           
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+          {/* Brand - Fixed height */}
+          <Typography 
+            variant="body2" 
+            sx={{ 
+              mb: 3,
+              height: 20,
+              textTransform: 'uppercase',
+              fontSize: '0.8125rem',
+              fontWeight: 600,
+              letterSpacing: '0.5px',
+              color: 'text.secondary',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap'
+            }}
+          >
             {product.brand}
           </Typography>
           
-          <Typography variant="h6" color="primary" fontWeight="bold">
-            ${product.price?.toFixed(2)}
-          </Typography>
+          {/* Price - Fixed at bottom */}
+          <Box sx={{ mt: 'auto', height: 36 }}>
+            <Typography 
+              variant="h5" 
+              sx={{
+                fontWeight: 700,
+                fontSize: '1.5rem',
+                color: 'primary.main',
+                lineHeight: 1.5
+              }}
+            >
+              Rs {product.price?.toFixed(2)}
+            </Typography>
+          </Box>
         </CardContent>
       </CardActionArea>
     </Card>
+
+    {/* Login Dialog for Guests */}
+    <Dialog 
+      open={openLoginDialog} 
+      onClose={handleCloseDialog}
+      maxWidth="xs"
+      fullWidth
+    >
+      <DialogTitle sx={{ fontWeight: 600, fontSize: '1.25rem' }}>
+        Login Required
+      </DialogTitle>
+      <DialogContent>
+        <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+          Please log in to add items to your wishlist.
+        </Typography>
+      </DialogContent>
+      <DialogActions sx={{ px: 3, pb: 2 }}>
+        <Button 
+          onClick={handleCloseDialog}
+          sx={{ textTransform: 'none' }}
+        >
+          Cancel
+        </Button>
+        <Button 
+          onClick={handleLoginRedirect} 
+          variant="contained"
+          sx={{ textTransform: 'none' }}
+        >
+          Login
+        </Button>
+      </DialogActions>
+    </Dialog>
+  </>
   );
 };
 

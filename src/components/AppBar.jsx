@@ -43,6 +43,11 @@ export default function ResponsiveAppBar() {
 
   // Handlers for user menu
   const handleOpenUserMenu = (event) => {
+    // If user is not authenticated, navigate to login
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
     setAnchorElUser(event.currentTarget);
   };
   const handleCloseUserMenu = () => {

@@ -861,11 +861,31 @@ const ProductListingPage = () => {
         )}
 
         {!loading && !error && filteredProducts.length > 0 && (
-          <Grid container spacing={3}>
+          <Grid 
+            container 
+            spacing={3}
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: {
+                xs: '1fr',
+                sm: 'repeat(2, 1fr)',
+                md: 'repeat(3, 1fr)',
+                lg: 'repeat(4, 1fr)'
+              },
+              gap: 3,
+              gridAutoRows: '1fr'
+            }}
+          >
             {filteredProducts.map((product) => (
-              <Grid item key={product._id} xs={12} sm={6} md={4} lg={3}>
+              <Box 
+                key={product._id} 
+                sx={{ 
+                  display: 'flex',
+                  minHeight: 0
+                }}
+              >
                 <ProductCard product={product} />
-              </Grid>
+              </Box>
             ))}
           </Grid>
         )}
